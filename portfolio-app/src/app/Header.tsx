@@ -1,3 +1,9 @@
+import styles from "./Header.module.scss";
+
 export const Header: React.FC = () => {
-  return <></>;
+  return <div className={styles.wrapper}>
+    <div className={styles.container}>
+      
+    </div>
+  </div>;
 };
