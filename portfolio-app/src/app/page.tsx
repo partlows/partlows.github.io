@@ -1,8 +1,11 @@
+import Link from "next/link";
+
 const App: React.FC = () => {
   return (
     <div>
       <h1>Hello, world!</h1>
       <p> Test words </p>
+      <Link href="/wordle_clone">Click here to play Wordle</Link>
     </div>
   );
 };
