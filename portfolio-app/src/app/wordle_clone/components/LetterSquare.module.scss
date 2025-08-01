@@ -21,6 +21,7 @@
     cursor: default;
     caret-color: transparent;
     text-transform: uppercase;
+    pointer-events: none;
 
     &:focus-visible {
         outline: none;
