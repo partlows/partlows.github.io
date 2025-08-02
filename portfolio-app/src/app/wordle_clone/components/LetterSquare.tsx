@@ -20,10 +20,14 @@ export const LetterSquare: React.FC<LetterSquareProps> = ({
     setCurrentRow,
     currentWord,
     setCurrentWord,
+    wordToGuess,
+    isWordleSolved,
+    setIsWordleSolved,
     MAX_COLUMNS,
     MAX_ROWS,
   } = useWordleContext();
   const inputRef = useRef<HTMLInputElement>(null);
+
   useEffect(() => {
     if (currentColumn === squareIndex && currentRow === rowIndex) {
       inputRef.current?.focus();
@@ -50,6 +54,9 @@ export const LetterSquare: React.FC<LetterSquareProps> = ({
   };
 
   const moveToPreviousSquare = () => {
+    console.log("currentColumn: ", currentColumn);
+    console.log("squareIndex: ", squareIndex);
+
     if (currentColumn === squareIndex && currentColumn !== 0) {
       setCurrentColumn(currentColumn - 1);
     }
@@ -72,29 +79,33 @@ export const LetterSquare: React.FC<LetterSquareProps> = ({
         className={styles.letter}
         pattern="[A-Z]"
         onKeyDown={(e) => {
-          if (e.key === "Backspace") {
-            if (inputRef.current?.value) {
-              removeLetterFromWord();
-              return;
-            } else {
-              moveToPreviousSquare();
-            }
-          }
           if (e.key === "Enter") {
-            if (currentColumn === MAX_COLUMNS - 1 && inputRef.current?.value) {
-              // TODO: perform validation on the word itself
-              console.log(currentWord);
-              // setCurrentWord("");
-              // moveToNextRow();
+            if (
+              currentColumn === MAX_COLUMNS - 1 &&
+              currentWord.charAt(currentColumn)
+            ) {
+              if (currentWord.toUpperCase() === wordToGuess) {
+                console.log("You Win!");
+                // TODO: Create victory animation
+              } else {
+                // TODO: need to flip background colors of squares if correct and black out wrong guesses.
+                setCurrentWord("");
+                moveToNextRow();
+              }
             } else {
               // TODO: show popup indicating that user must fill in the whole word to submit
-              console.log(currentWord);
-              console.log("invalid submission");
+              console.log("invalid submission: ", currentWord);
             }
           }
         }}
         onKeyUp={(e) => {
           const target = e.target as HTMLInputElement;
+          if (e.key === "Backspace") {
+            if (currentWord.charAt(currentColumn)) {
+              removeLetterFromWord();
+              moveToPreviousSquare();
+            }
+          }
 
           if (/^[A-Za-z]$/.test(e.key)) {
             target.value = e.key.toUpperCase();
