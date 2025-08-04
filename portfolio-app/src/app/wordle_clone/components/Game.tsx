@@ -7,13 +7,11 @@ export const Game: React.FC = () => {
   const { currentColumn, currentRow } = useWordleContext();
 
   const handleContainerClick = () => {
-    console.log("handleContainerClick activated");
     const currentLetterSquare = document.getElementById(
       `row-${currentRow}-square-${currentColumn}`
     );
     if (currentLetterSquare) {
       currentLetterSquare.focus();
-      console.log("Focus applied via click handler");
     }
   };
 

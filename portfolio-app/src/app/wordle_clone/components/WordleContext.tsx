@@ -10,6 +10,8 @@ type WordleContextType = {
   setCurrentWord: React.Dispatch<React.SetStateAction<string>>;
   isWordleSolved: boolean;
   setIsWordleSolved: React.Dispatch<React.SetStateAction<boolean>>;
+  boardState: string[][];
+  setBoardState: React.Dispatch<React.SetStateAction<string[][]>>;
   wordToGuess: string;
   MAX_COLUMNS: number;
   MAX_ROWS: number;
@@ -32,10 +34,18 @@ export const WordleContextProvider = ({
 }: {
   children: React.ReactNode;
 }) => {
+  const MAX_COLUMNS = 5;
+  const MAX_ROWS = 6;
+
   const [currentRow, setCurrentRow] = useState(0);
   const [currentColumn, setCurrentColumn] = useState(0);
   const [currentWord, setCurrentWord] = useState("");
   const [isWordleSolved, setIsWordleSolved] = useState(false);
+  const [boardState, setBoardState] = useState<string[][]>(
+    Array.from({ length: MAX_ROWS }, () =>
+      Array.from({ length: MAX_COLUMNS }, () => "")
+    )
+  );
   const { wordToGuess } = useFiveLetterWordGeneration();
 
   return (
@@ -47,11 +57,13 @@ export const WordleContextProvider = ({
         setCurrentColumn,
         currentWord,
         setCurrentWord,
+        boardState,
+        setBoardState,
         isWordleSolved,
         setIsWordleSolved,
         wordToGuess,
-        MAX_COLUMNS: 5,
-        MAX_ROWS: 6,
+        MAX_COLUMNS,
+        MAX_ROWS,
       }}
     >
       {children}

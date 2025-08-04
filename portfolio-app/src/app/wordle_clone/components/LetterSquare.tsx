@@ -2,7 +2,9 @@
 
 import { useRef, useEffect } from "react";
 import styles from "./LetterSquare.module.scss";
+import { useWordValidation } from "../hooks/use-word-validation";
 import { useWordleContext } from "./WordleContext";
+import cn from "clsx";
 
 type LetterSquareProps = {
   squareIndex: number;
@@ -18,9 +20,9 @@ export const LetterSquare: React.FC<LetterSquareProps> = ({
     setCurrentColumn,
     currentRow,
     setCurrentRow,
-    currentWord,
-    setCurrentWord,
     wordToGuess,
+    boardState,
+    setBoardState,
     isWordleSolved,
     setIsWordleSolved,
     MAX_COLUMNS,
@@ -31,34 +33,43 @@ export const LetterSquare: React.FC<LetterSquareProps> = ({
   useEffect(() => {
     if (currentColumn === squareIndex && currentRow === rowIndex) {
       inputRef.current?.focus();
-      console.log("focus is on: ", inputRef.current?.id);
     }
   }, [currentColumn, squareIndex, currentRow, rowIndex]);
 
-  const appendLetterToWord = (letter: string) => {
-    setCurrentWord(currentWord + letter);
+  const { isLetterInWord, isLetterInRightSpot } = useWordValidation();
+
+  const isCompletedRow = currentRow !== rowIndex;
+  const hasLetter = !!boardState[rowIndex][squareIndex];
+  const letterInWord = hasLetter
+    ? isLetterInWord(boardState[rowIndex][squareIndex], wordToGuess)
+    : false;
+  const letterInRightSpot = hasLetter
+    ? isLetterInRightSpot(
+        boardState[rowIndex][squareIndex],
+        squareIndex,
+        wordToGuess
+      )
+    : false;
+
+  const appendLetterToWord = (
+    letter: string,
+    rowIndex: number,
+    columnIndex: number
+  ) => {
+    const newBoardState = [...boardState];
+    newBoardState[rowIndex][columnIndex] = letter;
+    setBoardState(newBoardState);
   };
 
-  const removeLetterFromWord = () => {
-    console.log("currentColumn: ", currentColumn);
-    console.log("letter being deleted", currentWord.charAt(currentColumn));
-    console.log("first letter", currentWord.charAt(0));
-    console.log("sliced word", currentWord.slice(0, currentColumn));
-    setCurrentWord(currentWord.slice(0, currentColumn));
+  const removeLetterFromWord = (rowIndex: number, columnIndex: number) => {
+    const newBoardState = [...boardState];
+    newBoardState[rowIndex][columnIndex] = "";
+    setBoardState(newBoardState);
   };
 
   const moveToNextSquare = () => {
     if (currentColumn === squareIndex && currentColumn !== MAX_COLUMNS - 1) {
       setCurrentColumn(currentColumn + 1);
-    }
-  };
-
-  const moveToPreviousSquare = () => {
-    console.log("currentColumn: ", currentColumn);
-    console.log("squareIndex: ", squareIndex);
-
-    if (currentColumn === squareIndex && currentColumn !== 0) {
-      setCurrentColumn(currentColumn - 1);
     }
   };
 
@@ -70,46 +81,76 @@ export const LetterSquare: React.FC<LetterSquareProps> = ({
   };
 
   return (
-    <div className={styles.container}>
+    <div
+      className={cn(styles["letter-container"], {
+        [styles["letter-container--filled"]]: boardState[rowIndex][squareIndex],
+        [styles["letter-container--guessed-incorrectly"]]:
+          (isWordleSolved || isCompletedRow) && hasLetter && !letterInWord,
+        [styles["letter-container--guessed-correctly-wrong-space"]]:
+          (isWordleSolved || isCompletedRow) &&
+          hasLetter &&
+          letterInWord &&
+          !letterInRightSpot,
+        [styles["letter-container--guessed-correctly-right-space"]]:
+          (isWordleSolved || isCompletedRow) &&
+          hasLetter &&
+          letterInWord &&
+          letterInRightSpot,
+      })}
+    >
       <input
         ref={inputRef}
         id={`row-${rowIndex}-square-${squareIndex}`}
         type="text"
+        disabled={currentRow !== rowIndex || isWordleSolved}
+        value={boardState[rowIndex][squareIndex]}
         maxLength={1}
-        className={styles.letter}
+        className={styles["letter-input"]}
         pattern="[A-Z]"
-        onKeyDown={(e) => {
+        onInput={() => {}}
+        onKeyUp={(e) => {
+          const target = e.target as HTMLInputElement;
+          if (e.key === "Backspace") {
+            if (boardState[rowIndex][squareIndex]) {
+              removeLetterFromWord(rowIndex, squareIndex);
+            } else {
+              console.log("a letter is not present");
+              if (currentColumn > 0) {
+                const newColumn = currentColumn - 1;
+                setCurrentColumn(newColumn);
+                removeLetterFromWord(rowIndex, newColumn);
+              }
+            }
+          }
           if (e.key === "Enter") {
             if (
-              currentColumn === MAX_COLUMNS - 1 &&
-              currentWord.charAt(currentColumn)
+              squareIndex === MAX_COLUMNS - 1 &&
+              !!boardState[rowIndex][squareIndex]
             ) {
-              if (currentWord.toUpperCase() === wordToGuess) {
+              if (
+                boardState[currentRow].join("").toLocaleUpperCase() ===
+                wordToGuess
+              ) {
                 console.log("You Win!");
+                setIsWordleSolved(true);
                 // TODO: Create victory animation
               } else {
                 // TODO: need to flip background colors of squares if correct and black out wrong guesses.
-                setCurrentWord("");
+                //setCurrentWord("");
                 moveToNextRow();
               }
             } else {
               // TODO: show popup indicating that user must fill in the whole word to submit
-              console.log("invalid submission: ", currentWord);
-            }
-          }
-        }}
-        onKeyUp={(e) => {
-          const target = e.target as HTMLInputElement;
-          if (e.key === "Backspace") {
-            if (currentWord.charAt(currentColumn)) {
-              removeLetterFromWord();
-              moveToPreviousSquare();
+              console.log(
+                "invalid submission: ",
+                boardState[currentRow].toString()
+              );
             }
           }
 
           if (/^[A-Za-z]$/.test(e.key)) {
             target.value = e.key.toUpperCase();
-            appendLetterToWord(e.key);
+            appendLetterToWord(e.key, rowIndex, squareIndex);
             moveToNextSquare();
           } else {
             e.preventDefault();

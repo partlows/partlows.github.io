@@ -6,13 +6,17 @@
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "test": "jest",
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
+    "clsx": "^2.1.1",
     "next": "15.1.6",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "react-hook-form": "^7.61.1"
+    "react-hook-form": "^7.61.1",
+    "wordle-wordlist": "^1.0.1-c"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
@@ -21,6 +25,7 @@
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "15.1.6",
+    "jest": "^30.0.5",
     "sass": "^1.84.0",
     "typescript": "^5"
   }
