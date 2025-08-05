@@ -9,8 +9,8 @@ export const ScreenKeyboard = () => {
 
   return (
     <div style={{display: "flex", flexDirection: "column", alignItems: "center"}}>
-      {KEYBOARD_LAYOUT.map((row) => {
-        return <KeyboardRow keyContent={row} />;
+      {KEYBOARD_LAYOUT.map((row, i) => {
+        return <KeyboardRow key={i}keyContent={row} />;
       })}
     </div>
   );
