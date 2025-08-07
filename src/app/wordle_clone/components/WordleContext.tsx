@@ -2,19 +2,20 @@ import { createContext, useContext, useState } from "react";
 import { useFiveLetterWordGeneration } from "../hooks/use-five-letter-word-generation";
 
 type WordleContextType = {
+  MAX_COLUMNS: number;
+  MAX_ROWS: number;
   currentRow: number;
   setCurrentRow: React.Dispatch<React.SetStateAction<number>>;
   currentColumn: number;
   setCurrentColumn: React.Dispatch<React.SetStateAction<number>>;
-  currentWord: string;
-  setCurrentWord: React.Dispatch<React.SetStateAction<string>>;
   isWordleSolved: boolean;
   setIsWordleSolved: React.Dispatch<React.SetStateAction<boolean>>;
   boardState: string[][];
   setBoardState: React.Dispatch<React.SetStateAction<string[][]>>;
   wordToGuess: string;
-  MAX_COLUMNS: number;
-  MAX_ROWS: number;
+  handleBackspace: () => void;
+  handleEnter: () => void;
+  handleKeyPress: (key: string) => void;
 };
 
 const WordleContext = createContext<WordleContextType | undefined>(undefined);
@@ -39,7 +40,6 @@ export const WordleContextProvider = ({
 
   const [currentRow, setCurrentRow] = useState(0);
   const [currentColumn, setCurrentColumn] = useState(0);
-  const [currentWord, setCurrentWord] = useState("");
   const [isWordleSolved, setIsWordleSolved] = useState(false);
   const [boardState, setBoardState] = useState<string[][]>(
     Array.from({ length: MAX_ROWS }, () =>
@@ -48,22 +48,89 @@ export const WordleContextProvider = ({
   );
   const { wordToGuess } = useFiveLetterWordGeneration();
 
+  const appendLetterToWord = (letter: string) => {
+    const newBoardState = [...boardState];
+    newBoardState[currentRow][currentColumn] = letter;
+    setBoardState(newBoardState);
+  };
+
+  const removeLetterFromWord = (columnToRemoveFrom: number) => {
+    const newBoardState = [...boardState];
+    newBoardState[currentRow][columnToRemoveFrom] = "";
+    setBoardState(newBoardState);
+  };
+
+  const moveToNextSquare = () => {
+    if (currentColumn !== MAX_COLUMNS - 1) {
+      setCurrentColumn(currentColumn + 1);
+    }
+  };
+
+  const moveToNextRow = () => {
+    if (currentRow < MAX_ROWS - 1) {
+      setCurrentRow(currentRow + 1);
+      setCurrentColumn(0);
+    }
+  };
+
+  const handleBackspace = () => {
+    if (!!boardState[currentRow][currentColumn]) {
+      console.log("removing letter");
+      removeLetterFromWord(currentColumn);
+    } else {
+      if (currentColumn > 0) {
+        console.log("moving back a space and removing letter");
+        console.log("currentColumn: ", currentColumn);
+        console.log("currentColumn - 1: ", currentColumn - 1);
+        const newColumn = currentColumn - 1;
+        setCurrentColumn(newColumn);
+        removeLetterFromWord(newColumn);
+      }
+    }
+  };
+
+  const handleEnter = () => {
+    if (
+      currentColumn === MAX_COLUMNS - 1 &&
+      !!boardState[currentRow][currentColumn]
+    ) {
+      if (boardState[currentRow].join("").toLocaleUpperCase() === wordToGuess) {
+        console.log("You Win!");
+        setIsWordleSolved(true);
+        // TODO: Create victory animation
+      } else {
+        // TODO: need to flip background colors of squares if correct and black out wrong guesses.
+        //setCurrentWord("");
+        moveToNextRow();
+      }
+    } else {
+      // TODO: show popup indicating that user must fill in the whole word to submit
+      console.log("invalid submission: ", boardState[currentRow].toString());
+    }
+  };
+
+  const handleKeyPress = (key: string) => {
+    appendLetterToWord(key);
+    moveToNextSquare();
+  };
+
   return (
     <WordleContext.Provider
       value={{
+        MAX_COLUMNS,
+        MAX_ROWS,
         currentRow,
         setCurrentRow,
         currentColumn,
         setCurrentColumn,
-        currentWord,
-        setCurrentWord,
         boardState,
         setBoardState,
         isWordleSolved,
         setIsWordleSolved,
         wordToGuess,
-        MAX_COLUMNS,
-        MAX_ROWS,
+        handleBackspace,
+        handleEnter,
+        handleKeyPress,
       }}
     >
       {children}

@@ -17,16 +17,13 @@ export const LetterSquare: React.FC<LetterSquareProps> = ({
 }) => {
   const {
     currentColumn,
-    setCurrentColumn,
     currentRow,
-    setCurrentRow,
     wordToGuess,
     boardState,
-    setBoardState,
     isWordleSolved,
-    setIsWordleSolved,
-    MAX_COLUMNS,
-    MAX_ROWS,
+    handleBackspace,
+    handleEnter,
+    handleKeyPress,
   } = useWordleContext();
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -36,7 +33,7 @@ export const LetterSquare: React.FC<LetterSquareProps> = ({
     }
   }, [currentColumn, squareIndex, currentRow, rowIndex]);
 
-  const { isLetterInWord, isLetterInRightSpot } = useWordValidation();
+  const { isLetterInWord, isLetterInCorrectSpot } = useWordValidation();
 
   const isCompletedRow = currentRow !== rowIndex;
   const hasLetter = !!boardState[rowIndex][squareIndex];
@@ -44,41 +41,12 @@ export const LetterSquare: React.FC<LetterSquareProps> = ({
     ? isLetterInWord(boardState[rowIndex][squareIndex], wordToGuess)
     : false;
   const letterInRightSpot = hasLetter
-    ? isLetterInRightSpot(
+    ? isLetterInCorrectSpot(
         boardState[rowIndex][squareIndex],
         squareIndex,
         wordToGuess
       )
     : false;
-
-  const appendLetterToWord = (
-    letter: string,
-    rowIndex: number,
-    columnIndex: number
-  ) => {
-    const newBoardState = [...boardState];
-    newBoardState[rowIndex][columnIndex] = letter;
-    setBoardState(newBoardState);
-  };
-
-  const removeLetterFromWord = (rowIndex: number, columnIndex: number) => {
-    const newBoardState = [...boardState];
-    newBoardState[rowIndex][columnIndex] = "";
-    setBoardState(newBoardState);
-  };
-
-  const moveToNextSquare = () => {
-    if (currentColumn === squareIndex && currentColumn !== MAX_COLUMNS - 1) {
-      setCurrentColumn(currentColumn + 1);
-    }
-  };
-
-  const moveToNextRow = () => {
-    if (currentRow < MAX_ROWS - 1) {
-      setCurrentRow(currentRow + 1);
-      setCurrentColumn(0);
-    }
-  };
 
   return (
     <div
@@ -111,47 +79,15 @@ export const LetterSquare: React.FC<LetterSquareProps> = ({
         onKeyUp={(e) => {
           const target = e.target as HTMLInputElement;
           if (e.key === "Backspace") {
-            if (boardState[rowIndex][squareIndex]) {
-              removeLetterFromWord(rowIndex, squareIndex);
-            } else {
-              console.log("a letter is not present");
-              if (currentColumn > 0) {
-                const newColumn = currentColumn - 1;
-                setCurrentColumn(newColumn);
-                removeLetterFromWord(rowIndex, newColumn);
-              }
-            }
+            handleBackspace();
           }
           if (e.key === "Enter") {
-            if (
-              squareIndex === MAX_COLUMNS - 1 &&
-              !!boardState[rowIndex][squareIndex]
-            ) {
-              if (
-                boardState[currentRow].join("").toLocaleUpperCase() ===
-                wordToGuess
-              ) {
-                console.log("You Win!");
-                setIsWordleSolved(true);
-                // TODO: Create victory animation
-              } else {
-                // TODO: need to flip background colors of squares if correct and black out wrong guesses.
-                //setCurrentWord("");
-                moveToNextRow();
-              }
-            } else {
-              // TODO: show popup indicating that user must fill in the whole word to submit
-              console.log(
-                "invalid submission: ",
-                boardState[currentRow].toString()
-              );
-            }
+            handleEnter();
           }
 
           if (/^[A-Za-z]$/.test(e.key)) {
             target.value = e.key.toUpperCase();
-            appendLetterToWord(e.key, rowIndex, squareIndex);
-            moveToNextSquare();
+            handleKeyPress(e.key);
           } else {
             e.preventDefault();
           }
