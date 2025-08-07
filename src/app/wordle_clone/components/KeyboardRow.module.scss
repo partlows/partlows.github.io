@@ -1,0 +1,24 @@
+.keyboard-row {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 6px;
+}
+
+.key {
+    background-color: #ffffff;
+    border: none;
+    border-radius: 2px;
+    height: 50px;
+    min-width: 30px;
+    max-width: 100%;
+    font-weight: bold;
+    font-size: 1rem;
+
+    &:hover {
+        color: inherit;
+        cursor: pointer;
+    }
+    &:focus-visible {
+        outline: solid 2px #43007a;
+    }
+}

@@ -7,7 +7,7 @@ export function useWordValidation() {
   const isLetterInWord = (letter: string, wordToGuess: string) => {
     return wordToGuess.includes(letter.toLocaleUpperCase()) ? true : false;
   };
-  const isLetterInRightSpot = (
+  const isLetterInCorrectSpot = (
     letter: string,
     letterIndex: number,
     wordToGuess: string
@@ -20,6 +20,6 @@ export function useWordValidation() {
   return {
     guessFormatter,
     isLetterInWord,
-    isLetterInRightSpot,
+    isLetterInCorrectSpot,
   };
 }

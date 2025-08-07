@@ -1,16 +1,44 @@
+"use client";
+
 import { KeyboardRow } from "./KeyboardRow";
+import styles from "./ScreenKeyboard.module.scss";
+import { useWordleContext } from "./WordleContext";
 
 export const ScreenKeyboard = () => {
+  const {
+    handleBackspace,
+    handleEnter,
+    handleKeyPress,
+    isWordleSolved,
+  } = useWordleContext();
+
   const KEYBOARD_LAYOUT = [
     ["Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P"],
     ["A", "S", "D", "F", "G", "H", "J", "K", "L"],
-    ["{enter}", "Z", "X", "C", "V", "B", "N", "M", "{bksp}"],
+    ["ENTER", "Z", "X", "C", "V", "B", "N", "M", "BKSP"],
   ];
 
+  const handleKeyClick = (key: string) => {
+    if (key === "ENTER") {
+      handleEnter();
+    } else if (key === "BKSP") {
+      handleBackspace();
+    } else {
+      handleKeyPress(key);
+    }
+  };
+
   return (
-    <div style={{display: "flex", flexDirection: "column", alignItems: "center"}}>
+    <div className={styles["screen-keyboard-wrapper"]}>
       {KEYBOARD_LAYOUT.map((row, i) => {
-        return <KeyboardRow key={i}keyContent={row} />;
+        return (
+          <KeyboardRow
+            disableKeys={isWordleSolved}
+            key={i}
+            keyContent={row}
+            handleKeyClick={handleKeyClick}
+          />
+        );
       })}
     </div>
   );
