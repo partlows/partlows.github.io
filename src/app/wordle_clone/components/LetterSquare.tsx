@@ -75,6 +75,7 @@ export const LetterSquare: React.FC<LetterSquareProps> = ({
         maxLength={1}
         className={styles["letter-input"]}
         pattern="[A-Z]"
+        inputMode="none"
         onInput={() => {}}
         onKeyUp={(e) => {
           const target = e.target as HTMLInputElement;
