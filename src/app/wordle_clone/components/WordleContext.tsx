@@ -75,13 +75,9 @@ export const WordleContextProvider = ({
 
   const handleBackspace = () => {
     if (!!boardState[currentRow][currentColumn]) {
-      console.log("removing letter");
       removeLetterFromWord(currentColumn);
     } else {
       if (currentColumn > 0) {
-        console.log("moving back a space and removing letter");
-        console.log("currentColumn: ", currentColumn);
-        console.log("currentColumn - 1: ", currentColumn - 1);
         const newColumn = currentColumn - 1;
         setCurrentColumn(newColumn);
         removeLetterFromWord(newColumn);
@@ -113,6 +109,13 @@ export const WordleContextProvider = ({
   };
 
   const handleKeyPress = (key: string) => {
+    if (
+      currentColumn === MAX_COLUMNS - 1 &&
+      !!boardState[currentRow][currentColumn]
+    ) {
+      return;
+    }
+
     appendLetterToWord(key);
     moveToNextSquare();
   };

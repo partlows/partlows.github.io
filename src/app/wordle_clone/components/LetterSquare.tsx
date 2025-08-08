@@ -67,6 +67,7 @@ export const LetterSquare: React.FC<LetterSquareProps> = ({
       })}
     >
       <input
+        autoComplete="off"
         ref={inputRef}
         id={`row-${rowIndex}-square-${squareIndex}`}
         type="text"
@@ -87,6 +88,14 @@ export const LetterSquare: React.FC<LetterSquareProps> = ({
           }
 
           if (/^[A-Za-z]$/.test(e.key)) {
+            if (
+              currentColumn === 4 &&
+              !!boardState[currentRow][currentColumn]
+            ) {
+              e.preventDefault();
+              return;
+            }
+
             target.value = e.key.toUpperCase();
             handleKeyPress(e.key);
           } else {

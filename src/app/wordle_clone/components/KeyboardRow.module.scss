@@ -1,24 +1,46 @@
 .keyboard-row {
-    display: flex;
-    gap: 6px;
-    margin-bottom: 6px;
+  display: flex;
+  gap: 6px;
+  margin-bottom: 6px;
 }
 
 .key {
-    background-color: #ffffff;
-    border: none;
-    border-radius: 2px;
-    height: 50px;
-    min-width: 30px;
-    max-width: 100%;
-    font-weight: bold;
-    font-size: 1rem;
+  background-color: #ffffff;
+  border: none;
+  border-radius: 2px;
+  height: 50px;
+  min-width: 40px;
+  max-width: 100%;
+  font-weight: bold;
+  font-size: 1rem;
 
-    &:hover {
-        color: inherit;
-        cursor: pointer;
+  &:hover {
+    color: inherit;
+    cursor: pointer;
+  }
+  
+  &:focus-visible {
+    outline: solid 2px #43007a;
+  }
+
+  &--guessed-incorrectly {
+    background-color: #3a3a3c;
+    & input {
+      color: white;
     }
-    &:focus-visible {
-        outline: solid 2px #43007a;
+  }
+
+  &--guessed-correctly-right-space {
+    background-color: #538d4e;
+    & input {
+      color: white;
     }
+  }
+
+  &--guessed-correctly-wrong-space {
+    background-color: #b59f3b;
+    & input {
+      color: white;
+    }
+  }
 }
