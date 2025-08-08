@@ -1,7 +1,3 @@
-"use client";
-
-import { useWordleContext } from "./WordleContext";
-import { useWordValidation } from "../hooks/use-word-validation";
 import styles from "./KeyboardRow.module.scss";
 import cn from "clsx";
 
@@ -16,8 +12,6 @@ export const KeyboardRow: React.FC<KeyboardRowProps> = ({
   handleKeyClick,
   disableKeys,
 }) => {
-  const { currentRow, boardState, wordToGuess, isGameOver } = useWordleContext();
-  const { isLetterInWord, isLetterInCorrectSpot } = useWordValidation();
 
   return (
     <div className={styles["keyboard-row"]}>
