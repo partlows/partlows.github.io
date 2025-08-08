@@ -101,7 +101,7 @@ export const WordleContextProvider = ({
       } else {
         // TODO: need to flip background colors of squares if correct and black out wrong guesses.
         if (currentRow === MAX_ROWS - 1) {
-          setIsGameOver(true); // TODO: change this bc it doesn't make sense
+          setIsGameOver(true);
           console.log("You Lose!");
         }
         moveToNextRow();
