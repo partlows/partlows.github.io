@@ -9,7 +9,7 @@ export const ScreenKeyboard = () => {
     handleBackspace,
     handleEnter,
     handleKeyPress,
-    isWordleSolved,
+    isGameOver,
   } = useWordleContext();
 
   const KEYBOARD_LAYOUT = [
@@ -33,7 +33,7 @@ export const ScreenKeyboard = () => {
       {KEYBOARD_LAYOUT.map((row, i) => {
         return (
           <KeyboardRow
-            disableKeys={isWordleSolved}
+            disableKeys={isGameOver}
             key={i}
             keyContent={row}
             handleKeyClick={handleKeyClick}

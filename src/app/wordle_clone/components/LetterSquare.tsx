@@ -20,7 +20,7 @@ export const LetterSquare: React.FC<LetterSquareProps> = ({
     currentRow,
     wordToGuess,
     boardState,
-    isWordleSolved,
+    isGameOver,
     handleBackspace,
     handleEnter,
     handleKeyPress,
@@ -53,14 +53,14 @@ export const LetterSquare: React.FC<LetterSquareProps> = ({
       className={cn(styles["letter-container"], {
         [styles["letter-container--filled"]]: boardState[rowIndex][squareIndex],
         [styles["letter-container--guessed-incorrectly"]]:
-          (isWordleSolved || isCompletedRow) && hasLetter && !letterInWord,
+          (isGameOver || isCompletedRow) && hasLetter && !letterInWord,
         [styles["letter-container--guessed-correctly-wrong-space"]]:
-          (isWordleSolved || isCompletedRow) &&
+          (isGameOver || isCompletedRow) &&
           hasLetter &&
           letterInWord &&
           !letterInRightSpot,
         [styles["letter-container--guessed-correctly-right-space"]]:
-          (isWordleSolved || isCompletedRow) &&
+          (isGameOver || isCompletedRow) &&
           hasLetter &&
           letterInWord &&
           letterInRightSpot,
@@ -70,7 +70,7 @@ export const LetterSquare: React.FC<LetterSquareProps> = ({
         ref={inputRef}
         id={`row-${rowIndex}-square-${squareIndex}`}
         type="text"
-        disabled={currentRow !== rowIndex || isWordleSolved}
+        disabled={currentRow !== rowIndex || isGameOver}
         value={boardState[rowIndex][squareIndex]}
         maxLength={1}
         className={styles["letter-input"]}

@@ -8,8 +8,8 @@ type WordleContextType = {
   setCurrentRow: React.Dispatch<React.SetStateAction<number>>;
   currentColumn: number;
   setCurrentColumn: React.Dispatch<React.SetStateAction<number>>;
-  isWordleSolved: boolean;
-  setIsWordleSolved: React.Dispatch<React.SetStateAction<boolean>>;
+  isGameOver: boolean;
+  setIsGameOver: React.Dispatch<React.SetStateAction<boolean>>;
   boardState: string[][];
   setBoardState: React.Dispatch<React.SetStateAction<string[][]>>;
   wordToGuess: string;
@@ -40,7 +40,7 @@ export const WordleContextProvider = ({
 
   const [currentRow, setCurrentRow] = useState(0);
   const [currentColumn, setCurrentColumn] = useState(0);
-  const [isWordleSolved, setIsWordleSolved] = useState(false);
+  const [isGameOver, setIsGameOver] = useState(false);
   const [boardState, setBoardState] = useState<string[][]>(
     Array.from({ length: MAX_ROWS }, () =>
       Array.from({ length: MAX_COLUMNS }, () => "")
@@ -96,11 +96,14 @@ export const WordleContextProvider = ({
     ) {
       if (boardState[currentRow].join("").toLocaleUpperCase() === wordToGuess) {
         console.log("You Win!");
-        setIsWordleSolved(true);
+        setIsGameOver(true);
         // TODO: Create victory animation
       } else {
         // TODO: need to flip background colors of squares if correct and black out wrong guesses.
-        //setCurrentWord("");
+        if (currentRow === MAX_ROWS - 1) {
+          setIsGameOver(true); // TODO: change this bc it doesn't make sense
+          console.log("You Lose!");
+        }
         moveToNextRow();
       }
     } else {
@@ -125,8 +128,8 @@ export const WordleContextProvider = ({
         setCurrentColumn,
         boardState,
         setBoardState,
-        isWordleSolved,
-        setIsWordleSolved,
+        isGameOver,
+        setIsGameOver,
         wordToGuess,
         handleBackspace,
         handleEnter,

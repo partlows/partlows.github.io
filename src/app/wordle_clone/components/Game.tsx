@@ -2,6 +2,7 @@ import { useWordleContext } from "./WordleContext";
 import { Board } from "./Board";
 import { ScreenKeyboard } from "./ScreenKeyboard";
 import styles from "./Game.module.scss";
+import { BuyMeACoffee } from "@/scripts";
 
 export const Game: React.FC = () => {
   const { currentColumn, currentRow } = useWordleContext();
@@ -17,6 +18,7 @@ export const Game: React.FC = () => {
 
   return (
     <div className={styles.container} onClick={handleContainerClick}>
+      <BuyMeACoffee />
       <Board />
       <ScreenKeyboard />
     </div>
