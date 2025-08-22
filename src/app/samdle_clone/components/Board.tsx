@@ -2,10 +2,10 @@
 
 import { WordRow } from "./WordRow";
 import styles from "./Board.module.scss";
-import { useWordleContext } from "./WordleContext";
+import { useSamdleContext } from "./SamdleContext";
 
 export const Board: React.FC = () => {
-  const { MAX_ROWS } = useWordleContext();
+  const { MAX_ROWS } = useSamdleContext();
   return (
     <div className={styles["board-wrapper"]}>
       {Array.from({ length: MAX_ROWS }, (_, index) => (

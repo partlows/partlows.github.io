@@ -1,11 +1,11 @@
-import { useWordleContext } from "./WordleContext";
+import { useSamdleContext } from "./SamdleContext";
 import { Board } from "./Board";
 import { ScreenKeyboard } from "./ScreenKeyboard";
 import styles from "./Game.module.scss";
 import { BuyMeACoffee } from "@/scripts";
 
 export const Game: React.FC = () => {
-  const { currentColumn, currentRow } = useWordleContext();
+  const { currentColumn, currentRow } = useSamdleContext();
 
   const handleContainerClick = () => {
     const currentLetterSquare = document.getElementById(

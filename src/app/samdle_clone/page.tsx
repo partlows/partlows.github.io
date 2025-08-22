@@ -1,14 +1,14 @@
 "use client";
 
 import {
-  WordleContextProvider,
-} from "./components/WordleContext";
+  SamdleContextProvider,
+} from "./components/SamdleContext";
 import { Game } from "./components/Game";
 
 export default function Page() {
   return (
-    <WordleContextProvider>
+    <SamdleContextProvider>
       <Game />
-    </WordleContextProvider>
+    </SamdleContextProvider>
   );
 }

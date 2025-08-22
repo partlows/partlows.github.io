@@ -18,8 +18,8 @@
     "next": "15.1.6",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "react-hook-form": "^7.61.1",
-    "wordle-wordlist": "^1.0.1-c"
+    "react-hook-form": "^7.61.1"
+
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",

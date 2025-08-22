@@ -3,7 +3,7 @@
 import { useRef, useEffect } from "react";
 import styles from "./LetterSquare.module.scss";
 import { useWordValidation } from "../hooks/use-word-validation";
-import { useWordleContext } from "./WordleContext";
+import { useSamdleContext } from "./SamdleContext";
 import cn from "clsx";
 
 type LetterSquareProps = {
@@ -24,7 +24,7 @@ export const LetterSquare: React.FC<LetterSquareProps> = ({
     handleBackspace,
     handleEnter,
     handleKeyPress,
-  } = useWordleContext();
+  } = useSamdleContext();
   const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {

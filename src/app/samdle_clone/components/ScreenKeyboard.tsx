@@ -2,7 +2,7 @@
 
 import { KeyboardRow } from "./KeyboardRow";
 import styles from "./ScreenKeyboard.module.scss";
-import { useWordleContext } from "./WordleContext";
+import { useSamdleContext } from "./SamdleContext";
 
 export const ScreenKeyboard = () => {
   const {
@@ -10,7 +10,7 @@ export const ScreenKeyboard = () => {
     handleEnter,
     handleKeyPress,
     isGameOver,
-  } = useWordleContext();
+  } = useSamdleContext();
 
   const KEYBOARD_LAYOUT = [
     ["Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P"],

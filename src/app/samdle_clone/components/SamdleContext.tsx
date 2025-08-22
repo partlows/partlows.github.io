@@ -1,7 +1,7 @@
 import { createContext, useContext, useState } from "react";
 import { useFiveLetterWordGeneration } from "../hooks/use-five-letter-word-generation";
 
-type WordleContextType = {
+type SamdleContextType = {
   MAX_COLUMNS: number;
   MAX_ROWS: number;
   currentRow: number;
@@ -18,19 +18,19 @@ type WordleContextType = {
   handleKeyPress: (key: string) => void;
 };
 
-const WordleContext = createContext<WordleContextType | undefined>(undefined);
+const SamdleContext = createContext<SamdleContextType | undefined>(undefined);
 
-export const useWordleContext = () => {
-  const context = useContext(WordleContext);
+export const useSamdleContext = () => {
+  const context = useContext(SamdleContext);
   if (!context) {
     throw new Error(
-      "useWordleContext must be used within a WordleContextProvider"
+      "useSamdleContext must be used within a SamdleContextProvider"
     );
   }
   return context;
 };
 
-export const WordleContextProvider = ({
+export const SamdleContextProvider = ({
   children,
 }: {
   children: React.ReactNode;
@@ -121,7 +121,7 @@ export const WordleContextProvider = ({
   };
 
   return (
-    <WordleContext.Provider
+    <SamdleContext.Provider
       value={{
         MAX_COLUMNS,
         MAX_ROWS,
@@ -140,6 +140,6 @@ export const WordleContextProvider = ({
       }}
     >
       {children}
-    </WordleContext.Provider>
+    </SamdleContext.Provider>
   );
 };
