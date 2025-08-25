@@ -5,7 +5,7 @@ const App: React.FC = () => {
     <div>
       <h1>Hello, world!</h1>
       <p> Test words </p>
-      <Link href="/samdle_clone">Click here to play Samdle</Link>
+      <Link href="/samdle">Click here to play Samdle</Link>
     </div>
   );
 };
