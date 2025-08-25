@@ -3,6 +3,7 @@ import { Board } from "./Board";
 import { ScreenKeyboard } from "./ScreenKeyboard";
 import styles from "./Game.module.scss";
 import { BuyMeACoffee } from "@/scripts";
+import { AlertBox } from "./AlertBox";
 
 export const Game: React.FC = () => {
   const { currentColumn, currentRow } = useSamdleContext();
@@ -18,6 +19,7 @@ export const Game: React.FC = () => {
 
   return (
     <div className={styles.container} onClick={handleContainerClick}>
+      <AlertBox />
       <BuyMeACoffee />
       <Board />
       <ScreenKeyboard />

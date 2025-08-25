@@ -13,10 +13,21 @@ type SamdleContextType = {
   boardState: string[][];
   setBoardState: React.Dispatch<React.SetStateAction<string[][]>>;
   wordToGuess: string;
+  gameState: GameStateType;
+  setGameState: React.Dispatch<React.SetStateAction<GameStateType>>;
+  alertMessage: string;
+  setAlertMessage: React.Dispatch<React.SetStateAction<string>>;
   handleBackspace: () => void;
   handleEnter: () => void;
   handleKeyPress: (key: string) => void;
 };
+
+export type GameStateType = "PLAYING" | "WON" | "LOST";
+export enum GameStateEnum {
+  PLAYING = "PLAYING",
+  WON = "WON",
+  LOST = "LOST",
+}
 
 const SamdleContext = createContext<SamdleContextType | undefined>(undefined);
 
@@ -46,6 +57,8 @@ export const SamdleContextProvider = ({
       Array.from({ length: MAX_COLUMNS }, () => "")
     )
   );
+  const [gameState, setGameState] = useState<GameStateType>("PLAYING");
+  const [alertMessage, setAlertMessage] = useState<string>("");
   const { wordToGuess } = useFiveLetterWordGeneration();
 
   const appendLetterToWord = (letter: string) => {
@@ -91,20 +104,22 @@ export const SamdleContextProvider = ({
       !!boardState[currentRow][currentColumn]
     ) {
       if (boardState[currentRow].join("").toLocaleUpperCase() === wordToGuess) {
-        console.log("You Win!");
+        setGameState("WON");
+        setAlertMessage("You Won!");
         setIsGameOver(true);
         // TODO: Create victory animation
       } else {
         // TODO: need to flip background colors of squares if correct and black out wrong guesses.
         if (currentRow === MAX_ROWS - 1) {
+          setGameState("LOST");
+          setAlertMessage(`${wordToGuess}`);
           setIsGameOver(true);
-          console.log("You Lose!");
         }
         moveToNextRow();
       }
     } else {
       // TODO: show popup indicating that user must fill in the whole word to submit
-      console.log("invalid submission: ", boardState[currentRow].toString());
+      setAlertMessage("Invalid Submission")
     }
   };
 
@@ -134,6 +149,10 @@ export const SamdleContextProvider = ({
         isGameOver,
         setIsGameOver,
         wordToGuess,
+        gameState,
+        setGameState,
+        alertMessage,
+        setAlertMessage,
         handleBackspace,
         handleEnter,
         handleKeyPress,
