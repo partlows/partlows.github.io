@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import { StackProvider, StackTheme } from "@stackframe/stack";
+import { stackServerApp } from "../stack";
 import localFont from "next/font/local";
 import { Header } from "./Header";
 import { Footer } from "./Footer";
@@ -39,7 +41,7 @@ export default function RootLayout({
           rel="stylesheet"
         />
       </head>
-      <body style={{ margin: 0, padding: 0, height: "100%" }}>
+      <body style={{ margin: 0, padding: 0, height: "100%" }}><StackProvider app={stackServerApp}><StackTheme>
         <header>
           <Header />
         </header>
@@ -47,7 +49,7 @@ export default function RootLayout({
         <footer>
           <Footer />
         </footer>
-      </body>
+      </StackTheme></StackProvider></body>
     </html>
   );
 }
