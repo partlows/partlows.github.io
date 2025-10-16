@@ -1,9 +1,5 @@
 import type { Metadata } from "next";
-import { StackProvider, StackTheme } from "@stackframe/stack";
-import { stackServerApp } from "../stack";
 import localFont from "next/font/local";
-import { Header } from "./Header";
-import { Footer } from "./Footer";
 
 const defaultFont = localFont({
   src: [
@@ -41,15 +37,9 @@ export default function RootLayout({
           rel="stylesheet"
         />
       </head>
-      <body style={{ margin: 0, padding: 0, height: "100%" }}><StackProvider app={stackServerApp}><StackTheme>
-        <header>
-          <Header />
-        </header>
-        <main>{children}</main>
-        <footer>
-          <Footer />
-        </footer>
-      </StackTheme></StackProvider></body>
+      <body style={{ margin: 0, padding: 0, height: "100%" }}>
+        {children}
+      </body>
     </html>
   );
 }
