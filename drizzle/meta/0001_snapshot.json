@@ -1,0 +1,283 @@
+{
+  "id": "4435e1e4-9019-4855-82ab-f38c26bb8714",
+  "prevId": "00000000-0000-0000-0000-000000000000",
+  "version": "7",
+  "dialect": "postgresql",
+  "tables": {
+    "public.SamdleStatistics": {
+      "name": "SamdleStatistics",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true,
+          "identity": {
+            "type": "always",
+            "name": "SamdleStatistics_id_seq",
+            "schema": "public",
+            "increment": "1",
+            "startWith": "1",
+            "minValue": "1",
+            "maxValue": "2147483647",
+            "cache": "1",
+            "cycle": false
+          }
+        },
+        "userId": {
+          "name": "userId",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "numberOfWins": {
+          "name": "numberOfWins",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "numberOf1Guesses": {
+          "name": "numberOf1Guesses",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "numberOf2Guesses": {
+          "name": "numberOf2Guesses",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "numberOf3Guesses": {
+          "name": "numberOf3Guesses",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "numberOf4Guesses": {
+          "name": "numberOf4Guesses",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "numberOf5Guesses": {
+          "name": "numberOf5Guesses",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "numberOfLosses": {
+          "name": "numberOfLosses",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "hasDailySamdleAttempt": {
+          "name": "hasDailySamdleAttempt",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": true
+        },
+        "winStreak": {
+          "name": "winStreak",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "userId": {
+          "name": "userId",
+          "tableFrom": "SamdleStatistics",
+          "tableTo": "Users",
+          "columnsFrom": [
+            "userId"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.Users": {
+      "name": "Users",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true,
+          "identity": {
+            "type": "always",
+            "name": "User_id_seq",
+            "schema": "public",
+            "increment": "1",
+            "startWith": "1",
+            "minValue": "1",
+            "maxValue": "2147483647",
+            "cache": "1",
+            "cycle": false
+          }
+        },
+        "First Name": {
+          "name": "First Name",
+          "type": "varchar(32)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "Last Name": {
+          "name": "Last Name",
+          "type": "varchar(64)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "Email Address": {
+          "name": "Email Address",
+          "type": "varchar(50)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "userSyncId": {
+          "name": "userSyncId",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "userSyncId": {
+          "name": "userSyncId",
+          "tableFrom": "Users",
+          "tableTo": "users_sync",
+          "schemaTo": "neon_auth",
+          "columnsFrom": [
+            "userSyncId"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "neon_auth.users_sync": {
+      "name": "users_sync",
+      "schema": "neon_auth",
+      "columns": {
+        "raw_json": {
+          "name": "raw_json",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true,
+          "generated": {
+            "as": "(raw_json ->> 'id'::text)",
+            "type": "stored"
+          }
+        },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "generated": {
+            "as": "(raw_json ->> 'display_name'::text)",
+            "type": "stored"
+          }
+        },
+        "email": {
+          "name": "email",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "generated": {
+            "as": "(raw_json ->> 'primary_email'::text)",
+            "type": "stored"
+          }
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false,
+          "generated": {
+            "as": "to_timestamp((trunc((((raw_json ->> 'signed_up_at_millis'::text))::bigint)::double precision) / (1000)::double precision))",
+            "type": "stored"
+          }
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "deleted_at": {
+          "name": "deleted_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {
+        "users_sync_deleted_at_idx": {
+          "name": "users_sync_deleted_at_idx",
+          "columns": [
+            {
+              "expression": "deleted_at",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last",
+              "opclass": "timestamptz_ops"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    }
+  },
+  "enums": {},
+  "schemas": {
+    "neon_auth": "neon_auth"
+  },
+  "sequences": {},
+  "roles": {},
+  "policies": {},
+  "views": {},
+  "_meta": {
+    "columns": {},
+    "schemas": {},
+    "tables": {}
+  }
+}
