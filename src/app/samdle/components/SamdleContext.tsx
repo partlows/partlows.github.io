@@ -57,7 +57,9 @@ export const SamdleContextProvider = ({
       Array.from({ length: MAX_COLUMNS }, () => "")
     )
   );
-  const [gameState, setGameState] = useState<GameStateType>("PLAYING");
+  const [gameState, setGameState] = useState<GameStateType>(
+    GameStateEnum.PLAYING
+  );
   const [alertMessage, setAlertMessage] = useState<string>("");
   const { wordToGuess } = useFiveLetterWordGeneration();
 
@@ -109,7 +111,6 @@ export const SamdleContextProvider = ({
         setIsGameOver(true);
         // TODO: Create victory animation
       } else {
-        // TODO: need to flip background colors of squares if correct and black out wrong guesses.
         if (currentRow === MAX_ROWS - 1) {
           setGameState("LOST");
           setAlertMessage(`${wordToGuess}`);
@@ -118,8 +119,7 @@ export const SamdleContextProvider = ({
         moveToNextRow();
       }
     } else {
-      // TODO: show popup indicating that user must fill in the whole word to submit
-      setAlertMessage("Invalid Submission")
+      setAlertMessage("Invalid Submission");
     }
   };
 
