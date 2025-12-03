@@ -39,12 +39,12 @@ export const ScreenKeyboard = () => {
 
       const letterStateMap: Record<string, string | undefined> = {};
       guessedWord.split("").forEach((letter, pos) => {
-        const state = positionStates[pos];
+        const currentState = positionStates[pos];
         if (
           !letterStateMap[letter] ||
-          getStatePriority(state) > getStatePriority(letterStateMap[letter])
+          getStatePriority(currentState) > getStatePriority(letterStateMap[letter])
         ) {
-          letterStateMap[letter] = state;
+          letterStateMap[letter] = currentState;
         }
       });
 

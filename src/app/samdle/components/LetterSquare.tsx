@@ -29,7 +29,7 @@ export const LetterSquare: React.FC<LetterSquareProps> = ({
 
   useEffect(() => {
     if (currentColumn === squareIndex && currentRow === rowIndex) {
-      inputRef.current?.focus();
+      inputRef.current?.focus({ preventScroll: true });
     }
   }, [currentColumn, squareIndex, currentRow, rowIndex]);
 
