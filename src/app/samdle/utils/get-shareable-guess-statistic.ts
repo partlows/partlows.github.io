@@ -1,16 +1,18 @@
+import { GameStateEnum } from "../components/SamdleContext";
 import { calculateLetterStates } from "./letter-validation";
 
 export function getShareableGuessStatistic(
   boardState: string[][],
-  targetWord: string
+  targetWord: string,
+  gameState: string
 ): string {
-  const numberOfGuesses = boardState.reduce((acc, curr) => {
+  const numberOfGuesses = gameState === GameStateEnum.WON ? boardState.reduce((acc, curr) => {
     if (curr[0] === "") {
       return acc;
     } else {
       return acc + 1;
     }
-  }, 0);
+  }, 0) : "X";
 
   let shareableGuessStatistic = `${numberOfGuesses}/6\n`;
   boardState.forEach((currRow) => {
@@ -23,11 +25,14 @@ export function getShareableGuessStatistic(
     letterStates.forEach((state) => {
       switch (state) {
         case "guessed-correctly-right-space":
-          return (shareableGuessStatistic += "🟩");
+          shareableGuessStatistic += "🟩";
+          break;
         case "guessed-correctly-wrong-space":
-          return (shareableGuessStatistic += "🟨");
+          shareableGuessStatistic += "🟨";
+          break;
         case "guessed-incorrectly":
-          return (shareableGuessStatistic += "⬛");
+          shareableGuessStatistic += "⬛";
+          break;
         default:
       }
     });

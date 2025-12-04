@@ -21,6 +21,8 @@ export const GameOverModal: React.FC<GameOverModalProps> = ({
     gameState === GameStateEnum.WON
       ? "Congratulations!"
       : "Better Luck Next Time!";
+
+      console.log(gameState);
   return (
     <dialog className={styles.container} open={isOpen}>
       <div className={styles.header}>
@@ -34,7 +36,7 @@ export const GameOverModal: React.FC<GameOverModalProps> = ({
         <button
           className={styles["stats-button"]}
           onClick={() => {
-            const shareableGuessStatistic = getShareableGuessStatistic(boardState, wordToGuess);
+            const shareableGuessStatistic = getShareableGuessStatistic(boardState, wordToGuess, gameState);
             navigator.clipboard.writeText(shareableGuessStatistic);
           }}
         >
