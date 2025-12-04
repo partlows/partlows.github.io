@@ -4,9 +4,17 @@ import { ScreenKeyboard } from "./ScreenKeyboard";
 import styles from "./Game.module.scss";
 import { BuyMeACoffee } from "@/scripts";
 import { AlertBox } from "./AlertBox";
+import { GameOverModal } from "./GameOverModal";
 
 export const Game: React.FC = () => {
-  const { currentColumn, currentRow } = useSamdleContext();
+  const {
+    currentColumn,
+    currentRow,
+    isGameOverModalOpen,
+    setIsGameOverModalOpen,
+    boardState,
+    isGameOver,
+  } = useSamdleContext();
 
   const handleContainerClick = () => {
     const currentLetterSquare = document.getElementById(
@@ -22,7 +30,17 @@ export const Game: React.FC = () => {
       <AlertBox />
       <BuyMeACoffee />
       <Board />
-      <ScreenKeyboard />
+      {!isGameOver && <ScreenKeyboard />}
+      <GameOverModal
+        isOpen={isGameOverModalOpen}
+        setIsOpen={setIsGameOverModalOpen}
+        boardState={boardState}
+      />
+      {isGameOver && (
+        <button className={styles["see-results-button"]} onClick={() => setIsGameOverModalOpen(true)}>
+          See Results
+        </button>
+      )}
     </div>
   );
 };

@@ -10,6 +10,8 @@ type SamdleContextType = {
   setCurrentColumn: React.Dispatch<React.SetStateAction<number>>;
   isGameOver: boolean;
   setIsGameOver: React.Dispatch<React.SetStateAction<boolean>>;
+  isGameOverModalOpen: boolean;
+  setIsGameOverModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
   boardState: string[][];
   setBoardState: React.Dispatch<React.SetStateAction<string[][]>>;
   wordToGuess: string;
@@ -52,6 +54,7 @@ export const SamdleContextProvider = ({
   const [currentRow, setCurrentRow] = useState(0);
   const [currentColumn, setCurrentColumn] = useState(0);
   const [isGameOver, setIsGameOver] = useState(false);
+  const [isGameOverModalOpen, setIsGameOverModalOpen] = useState(isGameOver);
   const [boardState, setBoardState] = useState<string[][]>(
     Array.from({ length: MAX_ROWS }, () =>
       Array.from({ length: MAX_COLUMNS }, () => "")
@@ -148,6 +151,8 @@ export const SamdleContextProvider = ({
         setBoardState,
         isGameOver,
         setIsGameOver,
+        isGameOverModalOpen,
+        setIsGameOverModalOpen,
         wordToGuess,
         gameState,
         setGameState,

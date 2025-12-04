@@ -5,7 +5,8 @@ import styles from "./AlertBox.module.scss";
 import { useSamdleContext } from "./SamdleContext";
 
 export const AlertBox: React.FC = () => {
-  const { alertMessage, setAlertMessage } = useSamdleContext!();
+  const { alertMessage, setAlertMessage, setIsGameOverModalOpen, isGameOver } =
+    useSamdleContext!();
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
@@ -16,6 +17,7 @@ export const AlertBox: React.FC = () => {
 
       timeoutRef.current = setTimeout(() => {
         setAlertMessage("");
+        if (isGameOver) setIsGameOverModalOpen(true);
       }, 3000);
     }
 
