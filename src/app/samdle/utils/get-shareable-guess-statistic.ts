@@ -5,7 +5,6 @@ export function getShareableGuessStatistic(
   targetWord: string
 ): string {
   const numberOfGuesses = boardState.reduce((acc, curr) => {
-    console.log(curr);
     if (curr[0] === "") {
       return acc;
     } else {
