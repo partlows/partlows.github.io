@@ -7,3 +7,21 @@
   width: 100vw;
   box-sizing: border-box;
 }
+
+.header {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.body {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+
+.stats-button {
+  height: 32px;
+  border-radius: 10px;
+  border-width: 1px;
+  background-color: #b1b4ef;
+}

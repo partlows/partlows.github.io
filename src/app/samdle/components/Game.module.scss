@@ -7,7 +7,18 @@
     margin: 0 auto;
 }
 
+.see-results-button-container {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 24px;
+}
+
 .see-results-button {
     padding: 8px;
     border-radius: 10px;
+    width: 200px;
+    height: 48px;
+    font-family: inherit;
+    font-size: 1rem;
+    font-weight: bold;
 }
