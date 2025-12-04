@@ -1,18 +1,21 @@
 import { SetStateAction } from "react";
 import styles from "./GameOverModal.module.scss";
 import { GameStateEnum, GameStateType } from "./SamdleContext";
+import { getShareableGuessStatistic } from "../utils/get-shareable-guess-statistic";
 
 type GameOverModalProps = {
   boardState: string[][];
   isOpen: boolean;
   setIsOpen: React.Dispatch<SetStateAction<boolean>>;
   gameState: GameStateType;
+  wordToGuess: string;
 };
 export const GameOverModal: React.FC<GameOverModalProps> = ({
   boardState,
   isOpen,
   setIsOpen,
   gameState,
+  wordToGuess,
 }) => {
   const headingText =
     gameState === GameStateEnum.WON
@@ -28,7 +31,15 @@ export const GameOverModal: React.FC<GameOverModalProps> = ({
       <div className={styles.body}>
         <h1>{headingText}</h1>
         <p style={{}}>Come back tomorrow for the next word!</p>
-        <button className={styles["stats-button"]} onClick={() => {}}>Share your stats!</button>
+        <button
+          className={styles["stats-button"]}
+          onClick={() => {
+            const shareableGuessStatistic = getShareableGuessStatistic(boardState, wordToGuess);
+            navigator.clipboard.writeText(shareableGuessStatistic);
+          }}
+        >
+          Share your stats!
+        </button>
       </div>
     </dialog>
   );

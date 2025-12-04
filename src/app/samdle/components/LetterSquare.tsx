@@ -37,7 +37,7 @@ export const LetterSquare: React.FC<LetterSquareProps> = ({
     <div
       className={cn(styles["letter-container"], {
         [styles["letter-container--filled"]]: boardState[rowIndex][squareIndex],
-        [styles[`letter-container${guessedLetterClassName}`]]:
+        [styles[`letter-container--${guessedLetterClassName}`]]:
           guessedLetterClassName,
       })}
     >

@@ -14,7 +14,8 @@ export const Game: React.FC = () => {
     setIsGameOverModalOpen,
     boardState,
     isGameOver,
-    gameState
+    gameState,
+    wordToGuess
   } = useSamdleContext();
 
   const handleContainerClick = () => {
@@ -37,6 +38,7 @@ export const Game: React.FC = () => {
         setIsOpen={setIsGameOverModalOpen}
         boardState={boardState}
         gameState={gameState}
+        wordToGuess={wordToGuess}
       />
       <div className={styles["see-results-button-container"]}>
         {isGameOver && (

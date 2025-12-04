@@ -11,7 +11,7 @@ export function calculateLetterStates(
 
   for (let i = 0; i < 5; i++) {
     if (guessedWord[i] && targetWord[i] === guessedWord[i]) {
-      result[i] = "--guessed-correctly-right-space";
+      result[i] = "guessed-correctly-right-space";
     }
   }
 
@@ -27,7 +27,7 @@ export function calculateLetterStates(
     }
 
     if (!targetWord.includes(letter)) {
-      result[i] = "--guessed-incorrectly";
+      result[i] = "guessed-incorrectly";
       continue;
     }
 
@@ -35,15 +35,15 @@ export function calculateLetterStates(
       .split("")
       .filter(
         (l, idx) =>
-          l === letter && result[idx] === "--guessed-correctly-right-space"
+          l === letter && result[idx] === "guessed-correctly-right-space"
       ).length;
     const availableSlots = (targetLetterCounts[letter] || 0) - correctCount;
 
     if (usedLetterCounts[letter] < availableSlots) {
-      result[i] = "--guessed-correctly-wrong-space";
+      result[i] = "guessed-correctly-wrong-space";
       usedLetterCounts[letter]++;
     } else {
-      result[i] = "--guessed-incorrectly";
+      result[i] = "guessed-incorrectly";
     }
   }
 
@@ -53,11 +53,11 @@ export function calculateLetterStates(
 export const getStatePriority = (state: string | undefined): number => {
   if (!state) return 0;
   switch (state) {
-    case "--guessed-correctly-right-space":
+    case "guessed-correctly-right-space":
       return 3;
-    case "--guessed-correctly-wrong-space":
+    case "guessed-correctly-wrong-space":
       return 2;
-    case "--guessed-incorrectly":
+    case "guessed-incorrectly":
       return 1;
     default:
       return 0;

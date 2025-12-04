@@ -23,7 +23,7 @@ export const KeyboardRow: React.FC<KeyboardRowProps> = ({
         return (
           <button
             className={cn(styles.key, {
-              [styles[`key${letterState}`]]: letterState,
+              [styles[`key--${letterState}`]]: letterState,
             })}
             disabled={disableKeys}
             key={i}
