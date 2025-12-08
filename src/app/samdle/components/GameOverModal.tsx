@@ -2,6 +2,7 @@ import { SetStateAction } from "react";
 import styles from "./GameOverModal.module.scss";
 import { GameStateEnum, GameStateType } from "./SamdleContext";
 import { getShareableGuessStatistic } from "../utils/get-shareable-guess-statistic";
+import { CopyToClipboardButton } from "./CopyToClipboardButton";
 
 type GameOverModalProps = {
   boardState: string[][];
@@ -22,7 +23,6 @@ export const GameOverModal: React.FC<GameOverModalProps> = ({
       ? "Congratulations!"
       : "Better Luck Next Time!";
 
-      console.log(gameState);
   return (
     <dialog className={styles.container} open={isOpen}>
       <div className={styles.header}>
@@ -33,15 +33,14 @@ export const GameOverModal: React.FC<GameOverModalProps> = ({
       <div className={styles.body}>
         <h1>{headingText}</h1>
         <p style={{}}>Come back tomorrow for the next word!</p>
-        <button
-          className={styles["stats-button"]}
-          onClick={() => {
-            const shareableGuessStatistic = getShareableGuessStatistic(boardState, wordToGuess, gameState);
-            navigator.clipboard.writeText(shareableGuessStatistic);
-          }}
-        >
-          Share your stats!
-        </button>
+        <CopyToClipboardButton
+          contentToCopy={getShareableGuessStatistic(
+            boardState,
+            wordToGuess,
+            gameState
+          )}
+          buttonText="Share your stats!"
+        />
       </div>
     </dialog>
   );

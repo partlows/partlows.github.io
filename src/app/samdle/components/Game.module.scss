@@ -22,4 +22,9 @@
     font-family: inherit;
     font-size: 1rem;
     font-weight: bold;
+    cursor: pointer;
+
+    &:hover {
+        background: rgb(212, 212, 212);
+    }
 }

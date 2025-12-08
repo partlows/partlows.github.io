@@ -1,5 +1,5 @@
 export function useFiveLetterWordGeneration() {
-  const wordToGuess = "Yacht"; // TODO: replace with api call
+  const wordToGuess = "Brand"; // TODO: replace with api call
   return {
     wordToGuess: wordToGuess.toLocaleUpperCase(),
   };
