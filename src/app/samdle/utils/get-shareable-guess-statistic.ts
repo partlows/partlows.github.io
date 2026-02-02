@@ -1,4 +1,4 @@
-import { GameStateEnum } from "../components/SamdleContext";
+import { PlayStateEnum } from "../types/samdle-types";
 import { calculateLetterStates } from "./letter-validation";
 
 export function getShareableGuessStatistic(
@@ -6,7 +6,7 @@ export function getShareableGuessStatistic(
   targetWord: string,
   gameState: string
 ): string {
-  const numberOfGuesses = gameState === GameStateEnum.WON ? boardState.reduce((acc, curr) => {
+  const numberOfGuesses = gameState === PlayStateEnum.WON ? boardState.reduce((acc, curr) => {
     if (curr[0] === "") {
       return acc;
     } else {

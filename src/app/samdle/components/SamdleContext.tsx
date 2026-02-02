@@ -1,5 +1,10 @@
 import { createContext, useContext, useState } from "react";
 import { useFiveLetterWordGeneration } from "../hooks/use-five-letter-word-generation";
+import {
+  PlayStateEnum,
+  PlayStateType,
+  GameStateType,
+} from "../types/samdle-types";
 
 type SamdleContextType = {
   MAX_COLUMNS: number;
@@ -15,21 +20,14 @@ type SamdleContextType = {
   boardState: string[][];
   setBoardState: React.Dispatch<React.SetStateAction<string[][]>>;
   wordToGuess: string;
-  gameState: GameStateType;
-  setGameState: React.Dispatch<React.SetStateAction<GameStateType>>;
+  playState: PlayStateType;
+  setPlayState: React.Dispatch<React.SetStateAction<PlayStateType>>;
   alertMessage: string;
   setAlertMessage: React.Dispatch<React.SetStateAction<string>>;
   handleBackspace: () => void;
   handleEnter: () => void;
   handleKeyPress: (key: string) => void;
 };
-
-export type GameStateType = "PLAYING" | "WON" | "LOST";
-export enum GameStateEnum {
-  PLAYING = "PLAYING",
-  WON = "WON",
-  LOST = "LOST",
-}
 
 const SamdleContext = createContext<SamdleContextType | undefined>(undefined);
 
@@ -45,23 +43,31 @@ export const useSamdleContext = () => {
 
 export const SamdleContextProvider = ({
   children,
+  gameState,
+  setGameState,
 }: {
   children: React.ReactNode;
+  gameState: GameStateType;
+  setGameState: React.Dispatch<React.SetStateAction<GameStateType | undefined>>;
 }) => {
   const MAX_COLUMNS = 5;
   const MAX_ROWS = 6;
 
-  const [currentRow, setCurrentRow] = useState(0);
+  const [currentRow, setCurrentRow] = useState(gameState.currentRow ?? 0);
   const [currentColumn, setCurrentColumn] = useState(0);
-  const [isGameOver, setIsGameOver] = useState(false);
+  const [isGameOver, setIsGameOver] = useState(
+    gameState.playState === PlayStateEnum.WON ? true : false
+  );
   const [isGameOverModalOpen, setIsGameOverModalOpen] = useState(isGameOver);
   const [boardState, setBoardState] = useState<string[][]>(
-    Array.from({ length: MAX_ROWS }, () =>
-      Array.from({ length: MAX_COLUMNS }, () => "")
-    )
+    gameState.boardState
+      ? gameState.boardState
+      : Array.from({ length: MAX_ROWS }, () =>
+          Array.from({ length: MAX_COLUMNS }, () => "")
+        )
   );
-  const [gameState, setGameState] = useState<GameStateType>(
-    GameStateEnum.PLAYING
+  const [playState, setPlayState] = useState<PlayStateType>(
+    gameState.playState ?? PlayStateEnum.PLAYING
   );
   const [alertMessage, setAlertMessage] = useState<string>("");
   const { wordToGuess } = useFiveLetterWordGeneration();
@@ -84,11 +90,15 @@ export const SamdleContextProvider = ({
     }
   };
 
-  const moveToNextRow = () => {
+  const moveToNextRow = (): number => {
     if (currentRow < MAX_ROWS - 1) {
-      setCurrentRow(currentRow + 1);
+      const nextRow = currentRow + 1;
+      setCurrentRow(nextRow);
       setCurrentColumn(0);
+
+      return nextRow;
     }
+    return currentRow;
   };
 
   const handleBackspace = () => {
@@ -109,17 +119,35 @@ export const SamdleContextProvider = ({
       !!boardState[currentRow][currentColumn]
     ) {
       if (boardState[currentRow].join("").toLocaleUpperCase() === wordToGuess) {
-        setGameState("WON");
+        setPlayState("WON");
         setAlertMessage("You Won!");
         setIsGameOver(true);
+        setGameState({
+          boardState: boardState,
+          currentRow: currentRow,
+          playState: PlayStateEnum.WON,
+          previousWord: wordToGuess,
+        });
         // TODO: Create victory animation
       } else {
         if (currentRow === MAX_ROWS - 1) {
-          setGameState("LOST");
+          setPlayState("LOST");
           setAlertMessage(`${wordToGuess}`);
           setIsGameOver(true);
+          setGameState({
+            boardState: boardState,
+            currentRow: currentRow,
+            playState: PlayStateEnum.LOST,
+            previousWord: wordToGuess,
+          });
         }
-        moveToNextRow();
+        const newRow = moveToNextRow();
+        setGameState({
+          boardState: boardState,
+          currentRow: newRow,
+          playState: playState,
+          previousWord: undefined,
+        });
       }
     } else {
       setAlertMessage("Invalid Submission");
@@ -154,8 +182,8 @@ export const SamdleContextProvider = ({
         isGameOverModalOpen,
         setIsGameOverModalOpen,
         wordToGuess,
-        gameState,
-        setGameState,
+        playState,
+        setPlayState,
         alertMessage,
         setAlertMessage,
         handleBackspace,
