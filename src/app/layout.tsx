@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import { Header } from "./Header";
 import { Footer } from "./Footer";
+import { AuthProvider } from "@/components/AuthProvider";
 
 const defaultFont = localFont({
   src: [
@@ -31,6 +32,7 @@ export default function RootLayout({
         backgroundColor: "#b1b4ef",
         height: "100%",
       }}
+      suppressHydrationWarning
     >
       <head>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -40,13 +42,15 @@ export default function RootLayout({
         />
       </head>
       <body style={{ margin: 0, padding: 0, height: "100%" }}>
-        <header>
-          <Header />
-        </header>
-        <main>{children}</main>
-        <footer>
-          <Footer />
-        </footer>
+        <AuthProvider>
+          <header>
+            <Header />
+          </header>
+          <main>{children}</main>
+          <footer>
+            <Footer />
+          </footer>
+        </AuthProvider>
       </body>
     </html>
   );
