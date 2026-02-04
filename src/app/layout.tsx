@@ -42,7 +42,7 @@ export default function RootLayout({
         />
       </head>
       <body style={{ margin: 0, padding: 0, height: "100%" }}>
-        <AuthProvider>
+        {/* <AuthProvider> */}
           <header>
             <Header />
           </header>
@@ -50,7 +50,7 @@ export default function RootLayout({
           <footer>
             <Footer />
           </footer>
-        </AuthProvider>
+        {/* </AuthProvider> */}
       </body>
     </html>
   );
