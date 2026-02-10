@@ -44,7 +44,7 @@ export default function RootLayout({
           <Header />
         </header>
         <main>{children}</main>
-        <footer>
+        <footer style={{ position: "absolute", bottom: 0, width: "100%" }}>
           <Footer />
         </footer>
       </body>

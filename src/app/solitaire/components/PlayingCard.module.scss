@@ -1,0 +1,17 @@
+.playing-card-outer {
+    position: abosluet;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 80px;
+    width: 50px;
+    border: black 1px solid;
+    z-index: 11;
+}
+
+.playing-card-inner {
+    height: 50px;
+    width: 30px;
+    border: black 1px solid;
+}
