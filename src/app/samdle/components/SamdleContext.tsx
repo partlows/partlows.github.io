@@ -56,15 +56,15 @@ export const SamdleContextProvider = ({
   const [currentRow, setCurrentRow] = useState(gameState.currentRow ?? 0);
   const [currentColumn, setCurrentColumn] = useState(0);
   const [isGameOver, setIsGameOver] = useState(
-    gameState.playState === PlayStateEnum.WON ? true : false
+    (gameState.playState === PlayStateEnum.WON || gameState.playState === PlayStateEnum.LOST) ? true : false
   );
   const [isGameOverModalOpen, setIsGameOverModalOpen] = useState(isGameOver);
   const [boardState, setBoardState] = useState<string[][]>(
     gameState.boardState
       ? gameState.boardState
       : Array.from({ length: MAX_ROWS }, () =>
-          Array.from({ length: MAX_COLUMNS }, () => "")
-        )
+        Array.from({ length: MAX_COLUMNS }, () => "")
+      )
   );
   const [playState, setPlayState] = useState<PlayStateType>(
     gameState.playState ?? PlayStateEnum.PLAYING
@@ -114,10 +114,7 @@ export const SamdleContextProvider = ({
   };
 
   const handleEnter = () => {
-    if (
-      currentColumn === MAX_COLUMNS - 1 &&
-      !!boardState[currentRow][currentColumn]
-    ) {
+    if (boardState[currentRow][MAX_COLUMNS - 1] !== "") {
       if (boardState[currentRow].join("").toLocaleUpperCase() === wordToGuess) {
         setPlayState("WON");
         setAlertMessage("You Won!");
@@ -129,18 +126,17 @@ export const SamdleContextProvider = ({
           previousWord: wordToGuess,
         });
         // TODO: Create victory animation
+      } else if (currentRow === MAX_ROWS - 1) {
+        setPlayState("LOST");
+        setAlertMessage(`${wordToGuess}`);
+        setIsGameOver(true);
+        setGameState({
+          boardState: boardState,
+          currentRow: currentRow,
+          playState: PlayStateEnum.LOST,
+          previousWord: wordToGuess,
+        });
       } else {
-        if (currentRow === MAX_ROWS - 1) {
-          setPlayState("LOST");
-          setAlertMessage(`${wordToGuess}`);
-          setIsGameOver(true);
-          setGameState({
-            boardState: boardState,
-            currentRow: currentRow,
-            playState: PlayStateEnum.LOST,
-            previousWord: wordToGuess,
-          });
-        }
         const newRow = moveToNextRow();
         setGameState({
           boardState: boardState,
